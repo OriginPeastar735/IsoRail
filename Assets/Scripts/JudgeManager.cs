@@ -1,12 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class JudgeManager : MonoBehaviour
 {
+    public static JudgeManager instance;
+
+    public static event Action Perfect;
+    public static event Action Great;
+    public static event Action Good;
+    public static event Action Miss;
+
     private float currentPlayTime;
     private Note[] Notes;
     private int destroyedNotesCount;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -31,9 +47,12 @@ public class JudgeManager : MonoBehaviour
                     //この判定が通ってbreak;すれば多重判定を防げるかも
                     Debug.Log($"parfect: {judgeTiming}ms");
                     note.Delete();
+                    Perfect?.Invoke();
                     break; //多重判定回避
                 }
             }
         }
     }
+
+
 }
