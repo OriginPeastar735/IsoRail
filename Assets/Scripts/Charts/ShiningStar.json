@@ -1,0 +1,19 @@
+{
+    "bpm": 158,
+    "DNotes":[
+        {"bar":1, "type": "tap"},
+        {"bar":1.25, "type": "tap"}
+    ],
+    "FNotes":[
+        {"bar":1.5, "type": "tap"},
+        {"bar":1.75, "type": "tap"}
+    ],
+    "JNotes":[
+        {"bar":2, "type": "tap"},
+        {"bar":2.25, "type": "tap"}
+    ],
+    "KNotes":[
+        {"bar":2.5, "type": "tap"},
+        {"bar":2.75, "type": "tap"}
+    ]
+}
