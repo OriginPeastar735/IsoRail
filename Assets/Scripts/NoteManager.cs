@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using Newtonsoft.Json;
 
 public class NoteManager : MonoBehaviour
 {
@@ -15,6 +17,23 @@ public class NoteManager : MonoBehaviour
 
     private float barMillis;
     public int destroyedNotesCount = 0;
+
+    //ノーツ情報
+    [System.Serializable]
+    public class NoteData
+    {
+        public float bar;
+        public string type;
+    }
+
+    [System.Serializable] public class NotesData
+    {
+        public float bpm;
+        public List<NoteData> DNotes;
+        public List<NoteData> FNotes;
+        public List<NoteData> JNotes;
+        public List<NoteData> KNotes;
+    }
 
     public List<Note> Notes = new List<Note>();
 
@@ -33,9 +52,22 @@ public class NoteManager : MonoBehaviour
         bpm = 158;
         barMillis = (60f / bpm) * 4f;//1小節あたりの時間(ms)
 
-        float[] noteBars = { 1f, 1.5f, 2f };
+        //後からjsonの読み込みはgamemanagerから行いたいので後々void loadJson()を作成する
 
-        for (int i = 0; i < noteBars.Length; i++)
+        TextAsset jsonFile = Charts.Load<TextAsset>("ShiningStar");
+
+        //json文字列をc#のオブジェクトに変換
+
+        NotesData Data = JsonConvert.DeserializeObject<NotesData>(jsonFile.text);
+
+        //データを抽出
+
+        foreach (var note in NotesData.DNotes)
+        {
+            
+        }
+
+        for (int i = 0; i < NoteBars.Length; i++)
         {
             GameObject obj = Instantiate(NotePrefab);
             Note note = obj.GetComponent<Note>();
