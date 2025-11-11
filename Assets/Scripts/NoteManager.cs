@@ -26,7 +26,8 @@ public class NoteManager : MonoBehaviour
         public string type;
     }
 
-    [System.Serializable] public class NotesData
+    [System.Serializable]
+    public class NotesData
     {
         public float bpm;
         public List<NoteData> DNotes;
@@ -52,31 +53,45 @@ public class NoteManager : MonoBehaviour
         bpm = 158;
         barMillis = (60f / bpm) * 4f;//1小節あたりの時間(ms)
 
-        //後からjsonの読み込みはgamemanagerから行いたいので後々void loadJson()を作成する
+    }
 
-        TextAsset jsonFile = Charts.Load<TextAsset>("ShiningStar");
+    public void LoadJson(string fileName)
+    {
+        TextAsset jsonFile = Resources.Load<TextAsset>(fileName);
+        NotesData notesData = JsonConvert.DeserializeObject<NotesData>(jsonFile.text);
 
-        //json文字列をc#のオブジェクトに変換
+        bpm = notesData.bpm;
+        barMillis = (60f / bpm) * 4f;
 
-        NotesData Data = JsonConvert.DeserializeObject<NotesData>(jsonFile.text);
-
-        //データを抽出
-
-        foreach (var note in NotesData.DNotes)
+        foreach (var note in notesData.DNotes)
         {
-            
+            CreateNote(note.bar, "D");
         }
-
-        for (int i = 0; i < NoteBars.Length; i++)
+        foreach (var note in notesData.FNotes)
         {
-            GameObject obj = Instantiate(NotePrefab);
-            Note note = obj.GetComponent<Note>();
-            note.scrollSpeed = scrollSpeed;
-            float expectedTime = startTime + noteBars[i] * barMillis;//各ノーツの理想タイミング
-            note.Init(noteBars[i], expectedTime);
-            Notes.Add(note); //Listに追加
+            CreateNote(note.bar, "F");
+        }
+        foreach (var note in notesData.JNotes)
+        {
+            CreateNote(note.bar, "J");
+        }
+        foreach (var note in notesData.KNotes)
+        {
+            CreateNote(note.bar, "K");
         }
     }
+    private void CreateNote(float bar, string lane)
+    {
+        GameObject obj = Instantiate(NotePrefab);
+        Note note = obj.GetComponent<Note>();
+        note.scrollSpeed = scrollSpeed;
+
+        float expectedTime = startTime + bar * barMillis;//各ノーツの理想タイミング
+        note.Init(bar, expectedTime, lane);
+
+        Notes.Add(note); //Listに追加
+    }    
+
 
     // Update is called once per frame
     void Update()
@@ -90,7 +105,8 @@ public class NoteManager : MonoBehaviour
         }
     }
 
-    public void RemoveNote(Note note) {
+    public void RemoveNote(Note note)
+    {
         if (Notes.Contains(note))
         {
             Notes.Remove(note);

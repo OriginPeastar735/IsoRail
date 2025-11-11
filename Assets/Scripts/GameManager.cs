@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
         {
             PlayResult[i] = 0;
         }
+        NoteManager.instance.LoadJson("ShiningStar");
     }
 
     // Update is called once per frame

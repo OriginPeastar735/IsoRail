@@ -19,10 +19,20 @@ public class Note : MonoBehaviour
         }
     }
 
-    public void Init(float noteBar, float expectedTime)
+    public void Init(float noteBar, float expectedTime, string lane)
     {
         this.noteBar = noteBar;
         this.expectedTime = expectedTime;
+
+        Vector3 pos = transform.position;
+        switch (lane)
+        {
+            case "D": pos.x = 3f; break;
+            case "F": pos.x = 2f; break;
+            case "J": pos.x = 1f; break;
+            case "K": pos.x = 0f; break;
+        }
+        transform.position = pos;
     }
 
     public void UpdatePosition(float presentBar)
@@ -30,7 +40,7 @@ public class Note : MonoBehaviour
         this.presentBar = presentBar;
         float z = (presentBar - noteBar) * scrollSpeed;
 
-        transform.position = new Vector3(0f, 0f, z);//x,z座標は後から変更
+        transform.position = new Vector3(transform.position.x, 0f, z);//x,z座標は後から変更
     }
 
     public void Delete()
