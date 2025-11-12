@@ -25,14 +25,32 @@ public class GameManager : MonoBehaviour
     {
         PlayResult[3]++;
     }
+    void AddGreat()
+    {
+        PlayResult[4]++;
+    }
+    void AddGood()
+    {
+        PlayResult[5]++;
+    }
+    void AddMiss()
+    {
+        PlayResult[6]++;
+    }
 
     void OnEnable()
     {
         JudgeManager.Perfect += AddPerfect;
+        JudgeManager.Great += AddGreat;
+        JudgeManager.Good += AddGood;
+        JudgeManager.Miss += AddMiss;
     }
 
     void OnDisable()
     {
         JudgeManager.Perfect -= AddPerfect;
+        JudgeManager.Great -= AddGreat;
+        JudgeManager.Good -= AddGood;
+        JudgeManager.Miss -= AddMiss;
     }
 }

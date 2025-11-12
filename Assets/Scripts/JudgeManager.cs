@@ -32,24 +32,142 @@ public class JudgeManager : MonoBehaviour
     void Update()
     {
         currentPlayTime = MusicManager.instance.CurrentPlayTime;
-        if (Input.GetKeyDown("k"))
+        if (Input.GetKeyDown("d"))
         {
             //インスタンスではなくリストのコピーを用いることで参照エラー回避。
             //現在の再生時間から探索範囲を絞れば数万ノーツでも軽い処理が可能になる
-            var notesCopy = new List<Note>(NoteManager.instance.Notes);
+            var notesCopy = new List<Note>(NoteManager.instance.DNotes);
 
             foreach (var note in notesCopy)
             {
                 if (note == null) continue;
                 float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
-                if (judgeTiming <= 50 && judgeTiming >= -50)
+                if (judgeTiming <= 22.25 && judgeTiming >= -22.25)
                 {
-                    //この判定が通ってbreak;すれば多重判定を防げるかも
                     Debug.Log($"parfect: {judgeTiming}ms");
-                    note.Delete();
+                    note.Delete("D");
                     Perfect?.Invoke();
                     break; //多重判定回避
                 }
+                else if (judgeTiming <= 40 && judgeTiming >= -40)
+                {
+                    Debug.Log($"great: {judgeTiming}ms");
+                    note.Delete("D");
+                    Great?.Invoke();
+                    break; //多重判定回避
+                }
+                else if (judgeTiming <= 70 && judgeTiming >= -70)
+                {
+                    Debug.Log($"good: {judgeTiming}ms");
+                    note.Delete("D");
+                    Good?.Invoke();
+                    break; //多重判定回避
+                }
+            }
+        }
+        if (Input.GetKeyDown("f"))
+        {
+            var notesCopy = new List<Note>(NoteManager.instance.FNotes);
+
+            foreach (var note in notesCopy)
+            {
+                if (note == null) continue;
+                float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
+                if (judgeTiming <= 22.25 && judgeTiming >= -22.25)
+                {
+                    Debug.Log($"parfect: {judgeTiming}ms");
+                    note.Delete("F");
+                    Perfect?.Invoke();
+                    break; //多重判定回避
+                }
+                else if (judgeTiming <= 40 && judgeTiming >= -40)
+                {
+                    Debug.Log($"great: {judgeTiming}ms");
+                    note.Delete("F");
+                    Great?.Invoke();
+                    break; //多重判定回避
+                }
+                else if (judgeTiming <= 70 && judgeTiming >= -70)
+                {
+                    Debug.Log($"good: {judgeTiming}ms");
+                    note.Delete("F");
+                    Good?.Invoke();
+                    break; //多重判定回避
+                }
+            }
+        }
+        if (Input.GetKeyDown("j"))
+        {
+            var notesCopy = new List<Note>(NoteManager.instance.JNotes);
+
+            foreach (var note in notesCopy)
+            {
+                if (note == null) continue;
+                float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
+                if (judgeTiming <= 22.25 && judgeTiming >= -22.25)
+                {
+                    Debug.Log($"parfect: {judgeTiming}ms");
+                    note.Delete("J");
+                    Perfect?.Invoke();
+                    break; //多重判定回避
+                }
+                else if (judgeTiming <= 40 && judgeTiming >= -40)
+                {
+                    Debug.Log($"great: {judgeTiming}ms");
+                    note.Delete("J");
+                    Great?.Invoke();
+                    break; //多重判定回避
+                }
+                else if (judgeTiming <= 70 && judgeTiming >= -70)
+                {
+                    Debug.Log($"good: {judgeTiming}ms");
+                    note.Delete("J");
+                    Good?.Invoke();
+                    break; //多重判定回避
+                }
+            }
+        }
+        if (Input.GetKeyDown("k"))
+        {
+            var notesCopy = new List<Note>(NoteManager.instance.KNotes);
+
+            foreach (var note in notesCopy)
+            {
+                if (note == null) continue;
+                float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
+                if (judgeTiming <= 22.25 && judgeTiming >= -22.25)
+                {
+                    Debug.Log($"parfect: {judgeTiming}ms");
+                    note.Delete("K");
+                    Perfect?.Invoke();
+                    break; //多重判定回避
+                }
+                else if (judgeTiming <= 40 && judgeTiming >= -40)
+                {
+                    Debug.Log($"great: {judgeTiming}ms");
+                    note.Delete("K");
+                    Great?.Invoke();
+                    break; //多重判定回避
+                }
+                else if (judgeTiming <= 70 && judgeTiming >= -70)
+                {
+                    Debug.Log($"good: {judgeTiming}ms");
+                    note.Delete("K");
+                    Good?.Invoke();
+                    break; //多重判定回避
+                }
+            }
+        }
+        var forExproreMissesCopy = new List<Note>(NoteManager.instance.Notes);
+        foreach (var note in forExproreMissesCopy)
+        {
+            if (note == null) continue;
+            float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
+            if (judgeTiming > 100)
+            {
+                Debug.Log($"miss: {judgeTiming}ms");
+                note.Delete("D");
+                Miss?.Invoke();
             }
         }
     }

@@ -43,9 +43,9 @@ public class Note : MonoBehaviour
         transform.position = new Vector3(transform.position.x, 0f, z);//x,z座標は後から変更
     }
 
-    public void Delete()
+    public void Delete(string lane)
     {
-        NoteManager.instance.RemoveNote(this);//自身をListから削除
+        NoteManager.instance.RemoveNote(this, lane);//自身をListから削除
         Destroy(gameObject);
     }
 }

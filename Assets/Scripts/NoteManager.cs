@@ -37,6 +37,10 @@ public class NoteManager : MonoBehaviour
     }
 
     public List<Note> Notes = new List<Note>();
+    public List<Note> DNotes = new List<Note>();
+    public List<Note> FNotes = new List<Note>();
+    public List<Note> JNotes = new List<Note>();
+    public List<Note> KNotes = new List<Note>();
 
     void Awake()
     {
@@ -52,7 +56,6 @@ public class NoteManager : MonoBehaviour
         startTime = 0f;//後で変更
         bpm = 158;
         barMillis = (60f / bpm) * 4f;//1小節あたりの時間(ms)
-
     }
 
     public void LoadJson(string fileName)
@@ -89,8 +92,26 @@ public class NoteManager : MonoBehaviour
         float expectedTime = startTime + bar * barMillis;//各ノーツの理想タイミング
         note.Init(bar, expectedTime, lane);
 
-        Notes.Add(note); //Listに追加
-    }    
+        switch (lane)
+        {
+            case "D":
+                DNotes.Add(note);
+                break;
+            case "F":
+                FNotes.Add(note);
+                break;
+            case "J":
+                JNotes.Add(note);
+                break;
+            case "K":
+                KNotes.Add(note);
+                break;
+            default:
+                break;
+        }
+        Notes.Add(note);
+    }
+
 
 
     // Update is called once per frame
@@ -99,18 +120,42 @@ public class NoteManager : MonoBehaviour
         float currentTime = MusicManager.instance.CurrentPlayTime;
         float presentBar = (currentTime - startTime) / barMillis;//startTimeを入れているのはスタート演出での帳尻合わせ
 
-        foreach (var note in Notes)
+        foreach (var note in DNotes)
+        {
+            if (note != null) note.UpdatePosition(presentBar);
+        }
+        foreach (var note in FNotes)
+        {
+            if (note != null) note.UpdatePosition(presentBar);
+        }
+        foreach (var note in JNotes)
+        {
+            if (note != null) note.UpdatePosition(presentBar);
+        }
+        foreach (var note in KNotes)
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
     }
 
-    public void RemoveNote(Note note)
+    public void RemoveNote(Note note, string lane)
     {
-        if (Notes.Contains(note))
+        switch (lane)
         {
-            Notes.Remove(note);
+            case "D":
+                DNotes.Remove(note);
+                break;
+            case "F":
+                FNotes.Remove(note);
+                break;
+            case "J":
+                JNotes.Remove(note);
+                break;
+            case "K":
+                KNotes.Remove(note);
+                break;
+            default:
+                break;
         }
     }
-
 }
