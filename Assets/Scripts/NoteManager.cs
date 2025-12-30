@@ -9,6 +9,11 @@ public class NoteManager : MonoBehaviour
     public static NoteManager instance;
     public GameObject NotePrefab;//Unity上でNoteプレハブを設定
 
+    public Transform DRailBase;
+    public Transform FRailBase;
+    public Transform JRailBase;
+    public Transform KRailBase;
+
     public float bpm;
 
     public float scrollSpeed = 200f;
@@ -68,42 +73,49 @@ public class NoteManager : MonoBehaviour
 
         foreach (var note in notesData.DNotes)
         {
-            CreateNote(note.bar, "D");
+            CreateNote(note.bar, "D", DRailBase);
         }
         foreach (var note in notesData.FNotes)
         {
-            CreateNote(note.bar, "F");
+            CreateNote(note.bar, "F", FRailBase);
         }
         foreach (var note in notesData.JNotes)
         {
-            CreateNote(note.bar, "J");
+            CreateNote(note.bar, "J", JRailBase);
         }
         foreach (var note in notesData.KNotes)
         {
-            CreateNote(note.bar, "K");
+            CreateNote(note.bar, "K", KRailBase);
         }
     }
-    private void CreateNote(float bar, string lane)
+    private void CreateNote(float bar, string railStr, Transform rail)
     {
-        GameObject obj = Instantiate(NotePrefab);
+        GameObject obj = Instantiate(NotePrefab, rail);
         Note note = obj.GetComponent<Note>();
         note.scrollSpeed = scrollSpeed;
 
         float expectedTime = startTime + bar * barMillis;//各ノーツの理想タイミング
-        note.Init(bar, expectedTime, lane);
 
-        switch (lane)
+        note.Init(bar, expectedTime);
+        //Debug.Log($"{rail.name} worldX={rail.position.x}");
+
+
+        switch (railStr)
         {
             case "D":
+                
                 DNotes.Add(note);
                 break;
             case "F":
+                
                 FNotes.Add(note);
                 break;
             case "J":
+                
                 JNotes.Add(note);
                 break;
             case "K":
+                
                 KNotes.Add(note);
                 break;
             default:

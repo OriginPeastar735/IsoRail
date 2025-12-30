@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public int[] PlayResult = new int[7];//(score, combo, maxCombo, parfect, great, good, miss)
+
+    [SerializeField] private TextMeshPro ComboText;
+    string ComboStr;
 
     void Start()
     {
@@ -18,24 +22,42 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        ComboText.text = PlayResult[1] + "COMBO";
     }
 
     void AddPerfect()
     {
         PlayResult[3]++;
+        AddCombo();
     }
     void AddGreat()
     {
         PlayResult[4]++;
+        AddCombo();
     }
     void AddGood()
     {
         PlayResult[5]++;
+        AddCombo();
     }
     void AddMiss()
     {
         PlayResult[6]++;
+        ResetCombo();
+    }
+
+    void AddCombo()
+    {
+        PlayResult[1]++;
+        if (PlayResult[2] < PlayResult[1])
+        {
+            PlayResult[2] = PlayResult[1];
+        }
+    }
+
+    void ResetCombo()
+    {
+        PlayResult[1] = 0;
     }
 
     void OnEnable()
