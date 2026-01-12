@@ -8,6 +8,7 @@ public class NoteManager : MonoBehaviour
 {
     public static NoteManager instance;
     public GameObject NotePrefab;//Unity上でNoteプレハブを設定
+    public GameObject IsoNotePrefab;
 
     public Transform DRailBase;
     public Transform FRailBase;
@@ -35,17 +36,22 @@ public class NoteManager : MonoBehaviour
     public class NotesData
     {
         public float bpm;
+        public List<NoteData> SNotes;
         public List<NoteData> DNotes;
         public List<NoteData> FNotes;
         public List<NoteData> JNotes;
         public List<NoteData> KNotes;
+        public List<NoteData> LNotes;
     }
 
     public List<Note> Notes = new List<Note>();
+    public List<Note> SNotes = new List<Note>();
     public List<Note> DNotes = new List<Note>();
     public List<Note> FNotes = new List<Note>();
     public List<Note> JNotes = new List<Note>();
     public List<Note> KNotes = new List<Note>();
+    public List<Note> LNotes = new List<Note>();
+
 
     void Awake()
     {
@@ -71,6 +77,10 @@ public class NoteManager : MonoBehaviour
         bpm = notesData.bpm;
         barMillis = (60f / bpm) * 4f;
 
+        foreach (var note in notesData.SNotes)
+        {
+            CreateIsoNote(note.bar, "S", DRailBase);
+        }
         foreach (var note in notesData.DNotes)
         {
             CreateNote(note.bar, "D", DRailBase);
@@ -86,6 +96,10 @@ public class NoteManager : MonoBehaviour
         foreach (var note in notesData.KNotes)
         {
             CreateNote(note.bar, "K", KRailBase);
+        }
+        foreach (var note in notesData.LNotes)
+        {
+            CreateIsoNote(note.bar, "L", KRailBase);
         }
     }
     private void CreateNote(float bar, string railStr, Transform rail)
@@ -124,6 +138,34 @@ public class NoteManager : MonoBehaviour
         Notes.Add(note);
     }
 
+    private void CreateIsoNote(float bar, string railStr, Transform rail)
+    {
+        GameObject obj = Instantiate(IsoNotePrefab, rail);
+        Note note = obj.GetComponent<Note>();
+        note.scrollSpeed = scrollSpeed;
+
+        float expectedTime = startTime + bar * barMillis;//各ノーツの理想タイミング
+
+        note.Init(bar, expectedTime);
+        //Debug.Log($"{rail.name} worldX={rail.position.x}");
+
+
+        switch (railStr)
+        {
+            case "S":
+                SNotes.Add(note);
+                break;
+            case "L":
+                LNotes.Add(note);
+                break;
+            default:
+                break;
+        }
+        Notes.Add(note);
+    }
+
+
+
 
 
     // Update is called once per frame
@@ -132,6 +174,10 @@ public class NoteManager : MonoBehaviour
         float currentTime = MusicManager.instance.CurrentPlayTime;
         float presentBar = (currentTime - startTime) / barMillis;//startTimeを入れているのはスタート演出での帳尻合わせ
 
+        foreach (var note in SNotes)
+        {
+            if (note != null) note.UpdatePosition(presentBar);
+        }
         foreach (var note in DNotes)
         {
             if (note != null) note.UpdatePosition(presentBar);
@@ -148,12 +194,19 @@ public class NoteManager : MonoBehaviour
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
+        foreach (var note in LNotes)
+        {
+            if (note != null) note.UpdatePosition(presentBar);
+        }
     }
 
     public void RemoveNote(Note note, string lane)
     {
         switch (lane)
         {
+            case "S":
+                SNotes.Remove(note);
+                break;
             case "D":
                 DNotes.Remove(note);
                 break;
@@ -165,6 +218,9 @@ public class NoteManager : MonoBehaviour
                 break;
             case "K":
                 KNotes.Remove(note);
+                break;
+            case "L":
+                LNotes.Remove(note);
                 break;
             default:
                 break;

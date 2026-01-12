@@ -1,19 +1,27 @@
 {
     "bpm": 158,
-    "DNotes":[
+    "SNotes":[
         {"bar":1, "type": "tap"},
-        {"bar":1.25, "type": "tap"}
+        {"bar":2.5, "type": "tap"}
+    ],
+    "DNotes":[
+        {"bar":1.5, "type": "tap"},
+        {"bar":3, "type": "tap"}
     ],
     "FNotes":[
-        {"bar":1.5, "type": "tap"},
-        {"bar":1.75, "type": "tap"}
+        {"bar":1.75, "type": "tap"},
+        {"bar":3.25, "type": "tap"}
     ],
     "JNotes":[
         {"bar":2, "type": "tap"},
-        {"bar":2.25, "type": "tap"}
+        {"bar":3.5, "type": "tap"}
     ],
     "KNotes":[
-        {"bar":2.5, "type": "tap"},
+        {"bar":2.25, "type": "tap"},
+        {"bar":3.75, "type": "tap"}
+    ],
+    "LNotes":[
+        {"bar":1.25, "type": "tap"},
         {"bar":2.75, "type": "tap"}
     ]
 }
