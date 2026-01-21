@@ -20,7 +20,7 @@ public class TitleCardManager : MonoBehaviour
     
     void Start()
     {
-        for(int i = 0; i < 5; i++)
+        for(int i = -5; i < 5; i++)
         {
             CreateTitleCard(i);
         }
@@ -36,9 +36,11 @@ public class TitleCardManager : MonoBehaviour
     {
         GameObject obj = Instantiate(TitleCardPrefab, this.transform);
         TitleCard titleCard = obj.GetComponent<TitleCard>();
-        double r = 560f;
-        double x = 960 + r * Math.Cos(Math.PI + ((Math.PI / 6)*i));
-        double y = -r * Math.Sin((Math.PI/6) * i);
+        double a = 610f;
+        double b = 1220f;
+        double x = 960 + a * Math.Cos(Math.PI + ((Math.PI / 10)*i));
+        //double y = -b * Math.Sin((Math.PI/10) * i);
+        double y = -180 * i;
         titleCard.Init(x, y);
     }
 }

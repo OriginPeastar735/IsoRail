@@ -8,8 +8,7 @@ public class TitleCard : MonoBehaviour
     public double y;
     public void Init(double x, double y)
     {
-        RectTransform rect = GetComponent<RectTransform>();
-        rect.anchoredPosition = new Vector2((float)x, (float)y);
+        transform.localPosition = new Vector2((float)x, (float)y);
     }
     // Start is called before the first frame update
     void Start()
