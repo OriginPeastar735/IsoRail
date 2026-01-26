@@ -10,6 +10,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshPro ComboText;
     string ComboStr;
 
+    int CurrentScene = 1; // 0:opening, 1:musicselect, 2:play, 3:playresult
+
+    int musicIndex = 0;
+    int difficultyIndex = 0;
+
     void Start()
     {
         for (int i = 0; i < 7; i++)
@@ -23,6 +28,22 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         ComboText.text = PlayResult[1] + "COMBO";
+        if(Input.GetKeyDown("d") && CurrentScene == 1)//難易度低下
+        {
+            difficultyIndex--;
+        }
+        if(Input.GetKeyDown("f") && CurrentScene == 1)//難易度上昇
+        {
+            difficultyIndex++;
+        }
+        if(Input.GetKeyDown("j") && CurrentScene == 1)//1つ下の曲へ
+        {
+            musicIndex--;
+        }
+        if(Input.GetKeyDown("k") && CurrentScene == 1)//1つ上の曲へ
+        {
+            musicIndex++;
+        }
     }
 
     void AddPerfect()
