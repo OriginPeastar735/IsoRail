@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshPro ComboText;
     string ComboStr;
     //int CurrentScene = 1; // 0:opening, 1:musicselect, 2:play, 3:playresult
-    public GameScene CurrentScene {get; private set;}//外部から参照はできるが，書き込みはできない
+    public GameScene CurrentScene { get; private set; }//外部から参照はできるが，書き込みはできない
     int musicIndex = 0;
     int difficultyIndex = 0;
 
@@ -30,28 +30,32 @@ public class GameManager : MonoBehaviour
             PlayResult[i] = 0;
         }
         NoteManager.instance.LoadJson("ShiningStar");
-        //CurrentScene = SceneManager.GetActiveScene();
+        CurrentScene = GameScene.MusicSelect;
     }
 
     // Update is called once per frame
     void Update()
     {
         ComboText.text = PlayResult[1] + "COMBO";
-        if(Input.GetKeyDown("d") && CurrentScene == GameScene.MusicSelect)//難易度低下
+        if (Input.GetKeyDown("d") && CurrentScene == GameScene.MusicSelect)//難易度低下
         {
             difficultyIndex--;
         }
-        if(Input.GetKeyDown("f") && CurrentScene == GameScene.MusicSelect)//難易度上昇
+        if (Input.GetKeyDown("f") && CurrentScene == GameScene.MusicSelect)//難易度上昇
         {
             difficultyIndex++;
         }
-        if(Input.GetKeyDown("j") && CurrentScene == GameScene.MusicSelect)//1つ下の曲へ
+        if (Input.GetKeyDown("j") && CurrentScene == GameScene.MusicSelect)//1つ下の曲へ
         {
             musicIndex--;
         }
-        if(Input.GetKeyDown("k") && CurrentScene == GameScene.MusicSelect)//1つ上の曲へ
+        if (Input.GetKeyDown("k") && CurrentScene == GameScene.MusicSelect)//1つ上の曲へ
         {
             musicIndex++;
+        }
+        if (Input.GetKeyDown("a") && CurrentScene == GameScene.MusicSelect)//難易度低下
+        {
+            ChangeScene(GameScene.Play);
         }
     }
 
@@ -108,6 +112,25 @@ public class GameManager : MonoBehaviour
 
     public void ChangeScene(GameScene next)
     {
-        
+        CurrentScene = next;
+
+        switch (next)
+        {
+            case GameScene.Opening:
+                SceneManager.LoadScene("OpeningScene");
+                break;
+
+            case GameScene.MusicSelect:
+                SceneManager.LoadScene("MusicSelectScene");
+                break;
+
+            case GameScene.Play:
+                SceneManager.LoadScene("PlayScene");
+                break;
+
+            case GameScene.Result:
+                SceneManager.LoadScene("ResultScene");
+                break;
+        }
     }
 }
