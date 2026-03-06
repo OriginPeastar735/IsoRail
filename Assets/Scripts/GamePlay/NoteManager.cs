@@ -79,40 +79,51 @@ public class NoteManager : MonoBehaviour
 
         foreach (var note in notesData.SNotes)
         {
-            CreateIsoNote(note.bar, "S", DRailBase);
+            CreateIsoNote(note.bar, "S", DRailBase, note.type);
         }
         foreach (var note in notesData.DNotes)
         {
-            CreateNote(note.bar, "D", DRailBase);
+            CreateNote(note.bar, "D", DRailBase, note.type);
         }
         foreach (var note in notesData.FNotes)
         {
-            CreateNote(note.bar, "F", FRailBase);
+            CreateNote(note.bar, "F", FRailBase, note.type);
         }
         foreach (var note in notesData.JNotes)
         {
-            CreateNote(note.bar, "J", JRailBase);
+            CreateNote(note.bar, "J", JRailBase, note.type);
         }
         foreach (var note in notesData.KNotes)
         {
-            CreateNote(note.bar, "K", KRailBase);
+            CreateNote(note.bar, "K", KRailBase, note.type);
         }
         foreach (var note in notesData.LNotes)
         {
-            CreateIsoNote(note.bar, "L", KRailBase);
+            CreateIsoNote(note.bar, "L", KRailBase, note.type);
         }
     }
-    private void CreateNote(float bar, string railStr, Transform rail)
+
+    private float previousExpectedTime;//ロングノーツ描画のための一時変数
+    private void CreateNote(float bar, string railStr, Transform rail, string type)
     {
-        GameObject obj = Instantiate(NotePrefab, rail);
+        GameObject obj = Instantiate(NotePrefab, rail);//railを親、objを子として生成
         Note note = obj.GetComponent<Note>();
         note.scrollSpeed = scrollSpeed;
 
         float expectedTime = startTime + bar * barMillis;//各ノーツの理想タイミング
+        //ロングノーツの終点の時、始点のときのexpectedTimeを持ってくれば描画できるかも
+
+        if(type == "ls")
+        {
+            previousExpectedTime = expectedTime;
+        }
+        if(type == "le")
+        {
+            
+        }
 
         note.Init(bar, expectedTime);
         //Debug.Log($"{rail.name} worldX={rail.position.x}");
-
 
         switch (railStr)
         {
@@ -138,7 +149,13 @@ public class NoteManager : MonoBehaviour
         Notes.Add(note);
     }
 
-    private void CreateIsoNote(float bar, string railStr, Transform rail)
+    private void CreateLongNote(float lsp, float lep, Transform rail)
+    {
+        GameObject obj = Instantiate(LongNotePrefab, rail);//あとでプレハブ作ってね
+        float startZ = 
+    }
+
+    private void CreateIsoNote(float bar, string railStr, Transform rail, string type)
     {
         GameObject obj = Instantiate(IsoNotePrefab, rail);
         Note note = obj.GetComponent<Note>();
