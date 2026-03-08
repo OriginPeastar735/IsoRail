@@ -9,6 +9,7 @@ public class NoteManager : MonoBehaviour
     public static NoteManager instance;
     public GameObject NotePrefab;//Unity上でNoteプレハブを設定
     public GameObject IsoNotePrefab;
+    public GameObject LongNotePrefab;
 
     public Transform DRailBase;
     public Transform FRailBase;
@@ -42,6 +43,10 @@ public class NoteManager : MonoBehaviour
         public List<NoteData> JNotes;
         public List<NoteData> KNotes;
         public List<NoteData> LNotes;
+        public List<NoteData> DLongNotes;
+        public List<NoteData> FLongNotes;
+        public List<NoteData> JLongNotes;
+        public List<NoteData> KLongNotes;
     }
 
     public List<Note> Notes = new List<Note>();
@@ -51,7 +56,18 @@ public class NoteManager : MonoBehaviour
     public List<Note> JNotes = new List<Note>();
     public List<Note> KNotes = new List<Note>();
     public List<Note> LNotes = new List<Note>();
+    public List<LongNote> DLongNotes = new List<LongNote>();
+    public List<LongNote> FLongNotes = new List<LongNote>();
+    public List<LongNote> JLongNotes = new List<LongNote>();
+    public List<LongNote> KLongNotes = new List<LongNote>();
 
+    private float[] previousExpectedTime = new float[4];//ロングノーツ描画のための一時変数
+    private float[] previousNoteBar = new float[4];//ロングノーツ描画のための一時変数
+
+    const int D = 0;
+    const int F = 1;
+    const int J = 2;
+    const int K = 3;
 
     void Awake()
     {
@@ -101,46 +117,50 @@ public class NoteManager : MonoBehaviour
         {
             CreateIsoNote(note.bar, "L", KRailBase, note.type);
         }
+        foreach (var note in notesData.DLongNotes)
+        {
+            float expectedTime = startTime + note.bar * barMillis;
+            if (note.type == "s")
+            {
+                previousExpectedTime[D] = expectedTime;
+                previousNoteBar[D] = note.bar;
+            }
+            else if (note.type == "e")
+            {
+                CreateLongNote(previousNoteBar[D], note.bar, "D", DRailBase, previousExpectedTime[D], expectedTime);
+            }
+        }
     }
 
-    private float previousExpectedTime;//ロングノーツ描画のための一時変数
+
     private void CreateNote(float bar, string railStr, Transform rail, string type)
     {
+        float expectedTime = startTime + bar * barMillis;//各ノーツの理想タイミング
+
+        //ロングノーツの終点の時、始点のときのexpectedTimeを持ってくれば描画できるかも
+
         GameObject obj = Instantiate(NotePrefab, rail);//railを親、objを子として生成
         Note note = obj.GetComponent<Note>();
         note.scrollSpeed = scrollSpeed;
-
-        float expectedTime = startTime + bar * barMillis;//各ノーツの理想タイミング
-        //ロングノーツの終点の時、始点のときのexpectedTimeを持ってくれば描画できるかも
-
-        if(type == "ls")
-        {
-            previousExpectedTime = expectedTime;
-        }
-        if(type == "le")
-        {
-            
-        }
-
         note.Init(bar, expectedTime);
         //Debug.Log($"{rail.name} worldX={rail.position.x}");
 
         switch (railStr)
         {
             case "D":
-                
+
                 DNotes.Add(note);
                 break;
             case "F":
-                
+
                 FNotes.Add(note);
                 break;
             case "J":
-                
+
                 JNotes.Add(note);
                 break;
             case "K":
-                
+
                 KNotes.Add(note);
                 break;
             default:
@@ -149,10 +169,36 @@ public class NoteManager : MonoBehaviour
         Notes.Add(note);
     }
 
-    private void CreateLongNote(float lsp, float lep, Transform rail)
+    private void CreateLongNote(float startBar, float endBar, string railStr, Transform rail, float longStartTime, float longEndTime)
     {
         GameObject obj = Instantiate(LongNotePrefab, rail);//あとでプレハブ作ってね
-        float startZ = 
+        LongNote longNote = obj.GetComponent<LongNote>();
+        longNote.scrollSpeed = scrollSpeed;
+
+        longNote.Init(startBar, endBar, longStartTime, longEndTime);
+
+        switch (railStr)
+        {
+            case "D":
+
+                DLongNotes.Add(longNote);
+                break;
+            case "F":
+
+                FLongNotes.Add(longNote);
+                break;
+            case "J":
+
+                JLongNotes.Add(longNote);
+                break;
+            case "K":
+
+                KLongNotes.Add(longNote);
+                break;
+            default:
+                break;
+        }
+        //LongNotes.Add(longNote);
     }
 
     private void CreateIsoNote(float bar, string railStr, Transform rail, string type)
@@ -212,6 +258,10 @@ public class NoteManager : MonoBehaviour
             if (note != null) note.UpdatePosition(presentBar);
         }
         foreach (var note in LNotes)
+        {
+            if (note != null) note.UpdatePosition(presentBar);
+        }
+        foreach (var note in DLongNotes)
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
