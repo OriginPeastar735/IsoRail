@@ -50,6 +50,7 @@ public class NoteManager : MonoBehaviour
     }
 
     public List<Note> Notes = new List<Note>();
+    public List<LongNote> LongNotes = new List<LongNote>();
     public List<Note> SNotes = new List<Note>();
     public List<Note> DNotes = new List<Note>();
     public List<Note> FNotes = new List<Note>();
@@ -130,6 +131,45 @@ public class NoteManager : MonoBehaviour
                 CreateLongNote(previousNoteBar[D], note.bar, "D", DRailBase, previousExpectedTime[D], expectedTime);
             }
         }
+        foreach (var note in notesData.FLongNotes)
+        {
+            float expectedTime = startTime + note.bar * barMillis;
+            if (note.type == "s")
+            {
+                previousExpectedTime[F] = expectedTime;
+                previousNoteBar[F] = note.bar;
+            }
+            else if (note.type == "e")
+            {
+                CreateLongNote(previousNoteBar[F], note.bar, "F", DRailBase, previousExpectedTime[F], expectedTime);
+            }
+        }
+        foreach (var note in notesData.JLongNotes)
+        {
+            float expectedTime = startTime + note.bar * barMillis;
+            if (note.type == "s")
+            {
+                previousExpectedTime[J] = expectedTime;
+                previousNoteBar[J] = note.bar;
+            }
+            else if (note.type == "e")
+            {
+                CreateLongNote(previousNoteBar[J], note.bar, "J", DRailBase, previousExpectedTime[J], expectedTime);
+            }
+        }
+        foreach (var note in notesData.KLongNotes)
+        {
+            float expectedTime = startTime + note.bar * barMillis;
+            if (note.type == "s")
+            {
+                previousExpectedTime[K] = expectedTime;
+                previousNoteBar[K] = note.bar;
+            }
+            else if (note.type == "e")
+            {
+                CreateLongNote(previousNoteBar[K], note.bar, "K", DRailBase, previousExpectedTime[K], expectedTime);
+            }
+        }
     }
 
 
@@ -198,7 +238,7 @@ public class NoteManager : MonoBehaviour
             default:
                 break;
         }
-        //LongNotes.Add(longNote);
+        LongNotes.Add(longNote);
     }
 
     private void CreateIsoNote(float bar, string railStr, Transform rail, string type)
@@ -226,12 +266,6 @@ public class NoteManager : MonoBehaviour
         }
         Notes.Add(note);
     }
-
-
-
-
-
-    // Update is called once per frame
     void Update()
     {
         float currentTime = MusicManager.instance.CurrentPlayTime;
