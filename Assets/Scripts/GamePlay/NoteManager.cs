@@ -141,7 +141,7 @@ public class NoteManager : MonoBehaviour
             }
             else if (note.type == "e")
             {
-                CreateLongNote(previousNoteBar[F], note.bar, "F", DRailBase, previousExpectedTime[F], expectedTime);
+                CreateLongNote(previousNoteBar[F], note.bar, "F", FRailBase, previousExpectedTime[F], expectedTime);
             }
         }
         foreach (var note in notesData.JLongNotes)
@@ -154,7 +154,7 @@ public class NoteManager : MonoBehaviour
             }
             else if (note.type == "e")
             {
-                CreateLongNote(previousNoteBar[J], note.bar, "J", DRailBase, previousExpectedTime[J], expectedTime);
+                CreateLongNote(previousNoteBar[J], note.bar, "J", JRailBase, previousExpectedTime[J], expectedTime);
             }
         }
         foreach (var note in notesData.KLongNotes)
@@ -167,7 +167,7 @@ public class NoteManager : MonoBehaviour
             }
             else if (note.type == "e")
             {
-                CreateLongNote(previousNoteBar[K], note.bar, "K", DRailBase, previousExpectedTime[K], expectedTime);
+                CreateLongNote(previousNoteBar[K], note.bar, "K", KRailBase, previousExpectedTime[K], expectedTime);
             }
         }
     }
@@ -215,7 +215,7 @@ public class NoteManager : MonoBehaviour
         LongNote longNote = obj.GetComponent<LongNote>();
         longNote.scrollSpeed = scrollSpeed;
 
-        longNote.Init(startBar, endBar, longStartTime, longEndTime);
+        longNote.Init(startBar, endBar, longStartTime, longEndTime, railStr);
 
         switch (railStr)
         {
@@ -271,31 +271,43 @@ public class NoteManager : MonoBehaviour
         float currentTime = MusicManager.instance.CurrentPlayTime;
         float presentBar = (currentTime - startTime) / barMillis;//startTimeを入れているのはスタート演出での帳尻合わせ
 
-        foreach (var note in SNotes)
+        foreach (var note in new List<Note>(SNotes))
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
-        foreach (var note in DNotes)
+        foreach (var note in new List<Note>(DNotes))
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
-        foreach (var note in FNotes)
+        foreach (var note in new List<Note>(FNotes))
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
-        foreach (var note in JNotes)
+        foreach (var note in new List<Note>(JNotes))
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
-        foreach (var note in KNotes)
+        foreach (var note in new List<Note>(KNotes))
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
-        foreach (var note in LNotes)
+        foreach (var note in new List<Note>(LNotes))
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
-        foreach (var note in DLongNotes)
+        foreach (var note in new List<LongNote>(DLongNotes))
+        {
+            if (note != null) note.UpdatePosition(presentBar);
+        }
+        foreach (var note in new List<LongNote>(FLongNotes))
+        {
+            if (note != null) note.UpdatePosition(presentBar);
+        }
+        foreach (var note in new List<LongNote>(JLongNotes))
+        {
+            if (note != null) note.UpdatePosition(presentBar);
+        }
+        foreach (var note in new List<LongNote>(KLongNotes))
         {
             if (note != null) note.UpdatePosition(presentBar);
         }
@@ -322,6 +334,27 @@ public class NoteManager : MonoBehaviour
                 break;
             case "L":
                 LNotes.Remove(note);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void RemoveLongNote(LongNote longNote, string lane)
+    {
+        switch (lane)
+        {
+            case "D":
+                DLongNotes.Remove(longNote);
+                break;
+            case "F":
+                FLongNotes.Remove(longNote);
+                break;
+            case "J":
+                JLongNotes.Remove(longNote);
+                break;
+            case "K":
+                KLongNotes.Remove(longNote);
                 break;
             default:
                 break;

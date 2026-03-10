@@ -166,7 +166,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.541
   m_Pitch: 1
   Loop: 0
@@ -265,6 +265,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentPlayTime: 0
   shiningStar: {fileID: 8300000, guid: 1be6f435dc4bd4a4180e7115557015de, type: 3}
+  startDelay: 2
+  offset: 0.5
 --- !u!1 &128454116
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,12 +549,13 @@ MonoBehaviour:
   JRailBase: {fileID: 978483873}
   KRailBase: {fileID: 1564700348}
   bpm: 158
-  scrollSpeed: 50
+  scrollSpeed: 20
   destroyedNotesCount: 0
   Notes:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  LongNotes: []
   SNotes: []
   DNotes: []
   FNotes: []
@@ -1156,6 +1159,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3627048123498458416, guid: 2172ab6f4cc959b448b18fc038800d7d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4904348353407246164, guid: 2172ab6f4cc959b448b18fc038800d7d, type: 3}
       propertyPath: m_Name
       value: Note
@@ -1224,6 +1231,10 @@ PrefabInstance:
     - target: {fileID: 3175369532115906907, guid: 56d9e643c7a69b745a1326b6e32e8371, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3249313414310490759, guid: 56d9e643c7a69b745a1326b6e32e8371, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1534,7 +1545,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -2224,6 +2235,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3523380616670785746, guid: ceafefb22d7a50349b7e742ef22c4d2e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5908148343551610560, guid: ceafefb22d7a50349b7e742ef22c4d2e, type: 3}
       propertyPath: m_Name
       value: IsoNote
@@ -2238,7 +2253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7540581606811004295, guid: ceafefb22d7a50349b7e742ef22c4d2e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1.89
       objectReference: {fileID: 0}
     - target: {fileID: 7540581606811004295, guid: ceafefb22d7a50349b7e742ef22c4d2e, type: 3}
       propertyPath: m_LocalRotation.w

@@ -103,110 +103,230 @@ public class JudgeManager : MonoBehaviour
                     break; //多重判定回避
                 }
             }
+
+            var longNotesCopy = new List<LongNote>(NoteManager.instance.DLongNotes);
+            foreach(var ln in longNotesCopy)
+            {
+                if(ln.state != LongNoteState.None)continue;
+                float judgeTiming = (currentPlayTime - ln.previousExpectedTime) * 1000f;
+
+                if(Mathf.Abs(judgeTiming) <= 70)
+                {
+                    ln.OnStartPress();//別スクリプトでもちゃんと認識してくれる
+                    Good?.Invoke();
+                    break;
+                }
+            }
         }
+        if (Input.GetKey("d"))
+        {
+            var lnCopy = new List<LongNote>(NoteManager.instance.DLongNotes);
+            foreach(var ln in lnCopy)
+            {
+                if(ln.state == LongNoteState.Holding)
+                {
+                    //押し続けている間のコンボ加算などをここで行う
+                    float endTiming = (currentPlayTime - ln.expectedTime) * 1000f;
+                    if(endTiming >= 0)
+                    {
+                        ln.Finish("D");
+                    }
+                }
+            }
+            
+        }
+        if (Input.GetKeyUp("d"))
+        {
+            var lnCopy = new List<LongNote>(NoteManager.instance.DLongNotes);
+            foreach(var ln in lnCopy)
+            {
+                if(ln.state == LongNoteState.Holding)
+                {
+                    float judgeTiming = (currentPlayTime - ln.expectedTime) * 1000f;
+                    if(judgeTiming < 0)
+                    {
+                        ln.OnReleaseEarly();
+                        Miss?.Invoke();
+                    }
+                    else
+                    {
+                        ln.Finish(ln.railStr);
+                        Perfect?.Invoke();
+                    }
+                }
+            }
+        }
+        // --- Fレーンの判定 ---
         if (Input.GetKeyDown("f"))
         {
             var notesCopy = new List<Note>(NoteManager.instance.FNotes);
-
             foreach (var note in notesCopy)
             {
                 if (note == null) continue;
                 float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
-                if (judgeTiming <= 22.25 && judgeTiming >= -22.25)
+                if (Mathf.Abs(judgeTiming) <= 70) // 判定範囲を一纏めに記述（必要に応じて個別に戻してください）
                 {
-                    Debug.Log($"parfect: {judgeTiming}ms");
+                    if (judgeTiming <= 22.25 && judgeTiming >= -22.25) { Debug.Log($"Perfect: {judgeTiming}ms"); Perfect?.Invoke(); }
+                    else if (judgeTiming <= 40 && judgeTiming >= -40) { Debug.Log($"Great: {judgeTiming}ms"); Great?.Invoke(); }
+                    else { Debug.Log($"Good: {judgeTiming}ms"); Good?.Invoke(); }
+                    
                     note.Delete("F");
-                    Perfect?.Invoke();
-                    break; //多重判定回避
+                    break;
                 }
-                else if (judgeTiming <= 40 && judgeTiming >= -40)
+            }
+
+            var longNotesCopy = new List<LongNote>(NoteManager.instance.FLongNotes);
+            foreach (var ln in longNotesCopy)
+            {
+                if (ln.state != LongNoteState.None) continue;
+                float judgeTiming = (currentPlayTime - ln.previousExpectedTime) * 1000f;
+                if (Mathf.Abs(judgeTiming) <= 70)
                 {
-                    Debug.Log($"great: {judgeTiming}ms");
-                    note.Delete("F");
-                    Great?.Invoke();
-                    break; //多重判定回避
-                }
-                else if (judgeTiming <= 70 && judgeTiming >= -70)
-                {
-                    Debug.Log($"good: {judgeTiming}ms");
-                    note.Delete("F");
+                    ln.OnStartPress();
                     Good?.Invoke();
-                    break; //多重判定回避
+                    break;
                 }
             }
         }
+        if (Input.GetKey("f"))
+        {
+            var lnCopy = new List<LongNote>(NoteManager.instance.FLongNotes);
+            foreach (var ln in lnCopy)
+            {
+                if (ln.state == LongNoteState.Holding)
+                {
+                    float endTiming = (currentPlayTime - ln.expectedTime) * 1000f;
+                    if (endTiming >= 0) ln.Finish("F");
+                }
+            }
+        }
+        if (Input.GetKeyUp("f"))
+        {
+            var lnCopy = new List<LongNote>(NoteManager.instance.FLongNotes);
+            foreach (var ln in lnCopy)
+            {
+                if (ln.state == LongNoteState.Holding)
+                {
+                    float judgeTiming = (currentPlayTime - ln.expectedTime) * 1000f;
+                    if (judgeTiming < 0) { ln.OnReleaseEarly(); Miss?.Invoke(); }
+                    else { ln.Finish(ln.railStr); Perfect?.Invoke(); }
+                }
+            }
+        }
+
+        // --- Jレーンの判定 ---
         if (Input.GetKeyDown("j"))
         {
             var notesCopy = new List<Note>(NoteManager.instance.JNotes);
-
             foreach (var note in notesCopy)
             {
                 if (note == null) continue;
                 float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
-                if (judgeTiming <= 22.25 && judgeTiming >= -22.25)
+                if (Mathf.Abs(judgeTiming) <= 70)
                 {
-                    Debug.Log($"parfect: {judgeTiming}ms");
+                    if (judgeTiming <= 22.25 && judgeTiming >= -22.25) { Debug.Log($"Perfect: {judgeTiming}ms"); Perfect?.Invoke(); }
+                    else if (judgeTiming <= 40 && judgeTiming >= -40) { Debug.Log($"Great: {judgeTiming}ms"); Great?.Invoke(); }
+                    else { Debug.Log($"Good: {judgeTiming}ms"); Good?.Invoke(); }
+                    
                     note.Delete("J");
-                    Perfect?.Invoke();
-                    break; //多重判定回避
+                    break;
                 }
-                else if (judgeTiming <= 40 && judgeTiming >= -40)
+            }
+
+            var longNotesCopy = new List<LongNote>(NoteManager.instance.JLongNotes);
+            foreach (var ln in longNotesCopy)
+            {
+                if (ln.state != LongNoteState.None) continue;
+                float judgeTiming = (currentPlayTime - ln.previousExpectedTime) * 1000f;
+                if (Mathf.Abs(judgeTiming) <= 70)
                 {
-                    Debug.Log($"great: {judgeTiming}ms");
-                    note.Delete("J");
-                    Great?.Invoke();
-                    break; //多重判定回避
-                }
-                else if (judgeTiming <= 70 && judgeTiming >= -70)
-                {
-                    Debug.Log($"good: {judgeTiming}ms");
-                    note.Delete("J");
+                    ln.OnStartPress();
                     Good?.Invoke();
-                    break; //多重判定回避
+                    break;
                 }
             }
         }
+        if (Input.GetKey("j"))
+        {
+            var lnCopy = new List<LongNote>(NoteManager.instance.JLongNotes);
+            foreach (var ln in lnCopy)
+            {
+                if (ln.state == LongNoteState.Holding)
+                {
+                    float endTiming = (currentPlayTime - ln.expectedTime) * 1000f;
+                    if (endTiming >= 0) ln.Finish("J");
+                }
+            }
+        }
+        if (Input.GetKeyUp("j"))
+        {
+            var lnCopy = new List<LongNote>(NoteManager.instance.JLongNotes);
+            foreach (var ln in lnCopy)
+            {
+                if (ln.state == LongNoteState.Holding)
+                {
+                    float judgeTiming = (currentPlayTime - ln.expectedTime) * 1000f;
+                    if (judgeTiming < 0) { ln.OnReleaseEarly(); Miss?.Invoke(); }
+                    else { ln.Finish(ln.railStr); Perfect?.Invoke(); }
+                }
+            }
+        }
+
+        // --- Kレーンの判定 ---
         if (Input.GetKeyDown("k"))
         {
             var notesCopy = new List<Note>(NoteManager.instance.KNotes);
-
             foreach (var note in notesCopy)
             {
                 if (note == null) continue;
                 float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
-                if (judgeTiming <= 22.25 && judgeTiming >= -22.25)
+                if (Mathf.Abs(judgeTiming) <= 70)
                 {
-                    Debug.Log($"parfect: {judgeTiming}ms");
+                    if (judgeTiming <= 22.25 && judgeTiming >= -22.25) { Debug.Log($"Perfect: {judgeTiming}ms"); Perfect?.Invoke(); }
+                    else if (judgeTiming <= 40 && judgeTiming >= -40) { Debug.Log($"Great: {judgeTiming}ms"); Great?.Invoke(); }
+                    else { Debug.Log($"Good: {judgeTiming}ms"); Good?.Invoke(); }
+                    
                     note.Delete("K");
-                    Perfect?.Invoke();
-                    break; //多重判定回避
+                    break;
                 }
-                else if (judgeTiming <= 40 && judgeTiming >= -40)
+            }
+
+            var longNotesCopy = new List<LongNote>(NoteManager.instance.KLongNotes);
+            foreach (var ln in longNotesCopy)
+            {
+                if (ln.state != LongNoteState.None) continue;
+                float judgeTiming = (currentPlayTime - ln.previousExpectedTime) * 1000f;
+                if (Mathf.Abs(judgeTiming) <= 70)
                 {
-                    Debug.Log($"great: {judgeTiming}ms");
-                    note.Delete("K");
-                    Great?.Invoke();
-                    break; //多重判定回避
-                }
-                else if (judgeTiming <= 70 && judgeTiming >= -70)
-                {
-                    Debug.Log($"good: {judgeTiming}ms");
-                    note.Delete("K");
+                    ln.OnStartPress();
                     Good?.Invoke();
-                    break; //多重判定回避
+                    break;
                 }
             }
         }
-        var forExproreMissesCopy = new List<Note>(NoteManager.instance.Notes);
-        foreach (var note in forExproreMissesCopy)
+        if (Input.GetKey("k"))
         {
-            if (note == null) continue;
-            float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
-            if (judgeTiming > 100)
+            var lnCopy = new List<LongNote>(NoteManager.instance.KLongNotes);
+            foreach (var ln in lnCopy)
             {
-                Debug.Log($"miss: {judgeTiming}ms");
-                note.Delete("D");
-                Miss?.Invoke();
+                if (ln.state == LongNoteState.Holding)
+                {
+                    float endTiming = (currentPlayTime - ln.expectedTime) * 1000f;
+                    if (endTiming >= 0) ln.Finish("K");
+                }
+            }
+        }
+        if (Input.GetKeyUp("k"))
+        {
+            var lnCopy = new List<LongNote>(NoteManager.instance.KLongNotes);
+            foreach (var ln in lnCopy)
+            {
+                if (ln.state == LongNoteState.Holding)
+                {
+                    float judgeTiming = (currentPlayTime - ln.expectedTime) * 1000f;
+                    if (judgeTiming < 0) { ln.OnReleaseEarly(); Miss?.Invoke(); }
+                    else { ln.Finish(ln.railStr); Perfect?.Invoke(); }
+                }
             }
         }
         if (Input.GetKeyDown("l"))
