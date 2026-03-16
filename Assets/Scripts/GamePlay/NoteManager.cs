@@ -317,22 +317,22 @@ public class NoteManager : MonoBehaviour
     {
         switch (lane)
         {
-            case "S":
+            case "s":
                 SNotes.Remove(note);
                 break;
-            case "D":
+            case "d":
                 DNotes.Remove(note);
                 break;
-            case "F":
+            case "f":
                 FNotes.Remove(note);
                 break;
-            case "J":
+            case "j":
                 JNotes.Remove(note);
                 break;
-            case "K":
+            case "k":
                 KNotes.Remove(note);
                 break;
-            case "L":
+            case "l":
                 LNotes.Remove(note);
                 break;
             default:
@@ -344,16 +344,16 @@ public class NoteManager : MonoBehaviour
     {
         switch (lane)
         {
-            case "D":
+            case "d":
                 DLongNotes.Remove(longNote);
                 break;
-            case "F":
+            case "f":
                 FLongNotes.Remove(longNote);
                 break;
-            case "J":
+            case "j":
                 JLongNotes.Remove(longNote);
                 break;
-            case "K":
+            case "k":
                 KLongNotes.Remove(longNote);
                 break;
             default:

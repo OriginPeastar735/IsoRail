@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public enum LongNoteState
@@ -18,6 +19,7 @@ public class LongNote : MonoBehaviour
     private float endBar;//ロングノーツ終点
     public bool judged = false;
     public string railStr;
+    public float endZ;
 
 
     [Header("Children Objects")]
@@ -42,7 +44,7 @@ public class LongNote : MonoBehaviour
         this.presentBar = presentBar;
         
         float startZ = (presentBar - startBar) * scrollSpeed;
-        float endZ = (presentBar - endBar) * scrollSpeed;
+        endZ = (presentBar - endBar) * scrollSpeed;
 
         transform.localPosition = Vector3.zero;
 
@@ -59,12 +61,6 @@ public class LongNote : MonoBehaviour
             float length = Mathf.Min(0, endZ-startZ);
             HoldNote.localPosition = new Vector3(0f,0f,(startZ+endZ)/2);
             HoldNote.localScale = new Vector3(0.8f,0.1f,length);
-
-            //終点も通り過ぎたら削除する
-            if(endZ > 2 && state != LongNoteState.Finished)
-            {
-                Finish(railStr);
-            }
         }
         
 
