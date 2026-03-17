@@ -20,6 +20,7 @@ public class LongNote : MonoBehaviour
     public bool judged = false;
     public string railStr;
     public float endZ;
+    public float startZ;
 
 
     [Header("Children Objects")]
@@ -43,7 +44,7 @@ public class LongNote : MonoBehaviour
     {
         this.presentBar = presentBar;
         
-        float startZ = (presentBar - startBar) * scrollSpeed;
+        startZ = (presentBar - startBar) * scrollSpeed;
         endZ = (presentBar - endBar) * scrollSpeed;
 
         transform.localPosition = Vector3.zero;

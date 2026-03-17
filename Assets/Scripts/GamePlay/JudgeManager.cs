@@ -134,19 +134,12 @@ public class JudgeManager : MonoBehaviour
                 if (ln.state == LongNoteState.Holding)//ホールドされてるロングノーツだけを判定するよ
                 {
                     float judgeTiming = (currentPlayTime - ln.expectedTime) * 1000f;
-                    if (judgeTiming <= 0 && judgeTiming <= -22.25)
+                    Debug.Log($"release: {judgeTiming}ms");
+                    if (judgeTiming < -70)
                     {
-                        EffectManager.instance.PerfectEffect(railBase);
                         DestroyHoldEffect(key);
-                        ln.Finish(ln.railStr);
-                        Perfect?.Invoke();
-                    }
-                    else if (judgeTiming <= -22.25 && judgeTiming <= -40)
-                    {
-                        EffectManager.instance.GreatEffect(railBase);
-                        DestroyHoldEffect(key);
-                        ln.Finish(key);
-                        Great?.Invoke();
+                        ln.OnReleaseEarly();
+                        Miss?.Invoke();
                     }
                     else if (judgeTiming <= -40 && judgeTiming <= -70)
                     {
@@ -155,17 +148,18 @@ public class JudgeManager : MonoBehaviour
                         ln.Finish(key);
                         Good?.Invoke();
                     }
-                    else if (judgeTiming < -70)
+                    else if (judgeTiming <= -22.25 && judgeTiming <= -40)
                     {
+                        EffectManager.instance.GreatEffect(railBase);
                         DestroyHoldEffect(key);
-                        ln.OnReleaseEarly();
-                        Miss?.Invoke();
+                        ln.Finish(key);
+                        Great?.Invoke();
                     }
-                    else
+                    else if (judgeTiming <= 0 && judgeTiming <= -22.25)
                     {
                         EffectManager.instance.PerfectEffect(railBase);
                         DestroyHoldEffect(key);
-                        ln.Finish(key);
+                        ln.Finish(ln.railStr);
                         Perfect?.Invoke();
                     }
                 }
@@ -236,7 +230,7 @@ public class JudgeManager : MonoBehaviour
         if(ln == null)return;
 
         //z座標が一定値を超えたらミス
-        if(ln.endZ > 1.0f && ln.state == LongNoteState.None)
+        if(ln.startZ > 1.0f && ln.state == LongNoteState.None)
         {
             ln.Finish(key);
             Miss?.Invoke();
