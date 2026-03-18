@@ -25,7 +25,7 @@ public class Note : MonoBehaviour
 
         Vector3 local = transform.localPosition;
         local.z = z;
-        local.y = 0f;
+        local.y = 0.003f;
         transform.localPosition = local;
 
     }

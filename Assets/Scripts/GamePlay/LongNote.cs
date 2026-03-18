@@ -55,12 +55,12 @@ public class LongNote : MonoBehaviour
             if(StartNote != null) StartNote.gameObject.SetActive(false);//StartNoteを削除
         }
 
-        if(StartNote != null)StartNote.localPosition = new Vector3(0,0,startZ);
-        if(EndNote != null)EndNote.localPosition = new Vector3(0,0,endZ);
+        if(StartNote != null)StartNote.localPosition = new Vector3(0,0.003f,startZ);
+        if(EndNote != null)EndNote.localPosition = new Vector3(0,0.003f,endZ);
         if(HoldNote != null)
         {
             float length = Mathf.Min(0, endZ-startZ);
-            HoldNote.localPosition = new Vector3(0f,0f,(startZ+endZ)/2);
+            HoldNote.localPosition = new Vector3(0f,0.003f,(startZ+endZ)/2);
             HoldNote.localScale = new Vector3(0.8f,0.1f,length);
         }
         

@@ -40,7 +40,7 @@ public class EffectManager : MonoBehaviour
     {
         GameObject effect = Instantiate(
         perfectEffectPrefab,
-        rail.TransformPoint(Vector3.zero),
+        rail.TransformPoint(0,0.002f,0),
         Quaternion.identity,
         rail);
     }
@@ -49,7 +49,7 @@ public class EffectManager : MonoBehaviour
     {
         GameObject effect = Instantiate(
         greatEffectPrefab,
-        rail.TransformPoint(Vector3.zero),
+        rail.TransformPoint(0,0.002f,0),
         Quaternion.identity,
         rail);
     }
@@ -58,7 +58,7 @@ public class EffectManager : MonoBehaviour
     {
         GameObject effect = Instantiate(
         goodEffectPrefab,
-        rail.TransformPoint(Vector3.zero),
+        rail.TransformPoint(0,0.002f,0),
         Quaternion.identity,
         rail);
     }
@@ -67,7 +67,7 @@ public class EffectManager : MonoBehaviour
     {
         GameObject effect = Instantiate(
         holdEffectPrefab,
-        rail.TransformPoint(Vector3.zero),
+        rail.TransformPoint(0,0.002f,0),
         Quaternion.identity,
         rail);
         switch (key)
