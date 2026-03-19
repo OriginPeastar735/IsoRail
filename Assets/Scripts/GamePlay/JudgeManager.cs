@@ -121,6 +121,7 @@ public class JudgeManager : MonoBehaviour
                         EffectManager.instance.PerfectEffect(railBase);
                         DestroyHoldEffect(key);
                         ln.Finish(key);
+                        Perfect?.Invoke();
                     }
                 }
             }

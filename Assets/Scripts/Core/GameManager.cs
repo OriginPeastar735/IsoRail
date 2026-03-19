@@ -15,8 +15,15 @@ public class GameManager : MonoBehaviour
     };
 
     public int[] PlayResult = new int[7];//(score, combo, maxCombo, parfect, great, good, miss)
+    public float playScore = 0;
 
-    [SerializeField] private TextMeshPro ComboText;
+    public int theoScore = 1010000;
+    public int totalCombo = 0;
+    public float greatCoef = 0.8f;//great coefficient
+    public float goodCoef = 0.5f;
+
+    [SerializeField] private TextMeshProUGUI ComboText;
+    [SerializeField] private TextMeshProUGUI ScoreText;
     string ComboStr;
     //int CurrentScene = 1; // 0:opening, 1:musicselect, 2:play, 3:playresult
     public GameScene CurrentScene { get; private set; }//外部から参照はできるが，書き込みはできない
@@ -31,12 +38,13 @@ public class GameManager : MonoBehaviour
         }
         NoteManager.instance.LoadJson("ShiningStar");
         CurrentScene = GameScene.MusicSelect;
+        totalCombo = NoteManager.instance.totalCombo;
     }
 
     // Update is called once per frame
     void Update()
     {
-        ComboText.text = PlayResult[1] + "COMBO";
+        ComboText.text =  PlayResult[1].ToString();
         if (Input.GetKeyDown("d") && CurrentScene == GameScene.MusicSelect)//難易度低下
         {
             difficultyIndex--;
@@ -57,6 +65,8 @@ public class GameManager : MonoBehaviour
         {
             ChangeScene(GameScene.Play);
         }
+        PlayResult[0] = (int)(((theoScore * PlayResult[3]) / totalCombo) + ((theoScore * PlayResult[4] * greatCoef) / totalCombo) + ((theoScore * PlayResult[5] * goodCoef) / totalCombo));
+        ScoreText.text = PlayResult[0].ToString();
     }
 
     void AddPerfect()
@@ -87,6 +97,7 @@ public class GameManager : MonoBehaviour
         {
             PlayResult[2] = PlayResult[1];
         }
+        Debug.Log($"Score:{PlayResult[0]}");
     }
 
     void ResetCombo()

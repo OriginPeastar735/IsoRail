@@ -18,6 +18,8 @@ public class NoteManager : MonoBehaviour
 
     public float bpm;
 
+    public int totalCombo =0;
+
     public float scrollSpeed = 200f;
 
     private float startTime;
@@ -90,6 +92,19 @@ public class NoteManager : MonoBehaviour
     {
         TextAsset jsonFile = Resources.Load<TextAsset>(fileName);
         NotesData notesData = JsonConvert.DeserializeObject<NotesData>(jsonFile.text);
+
+        totalCombo = 0;
+
+        totalCombo += notesData.SNotes.Count;
+        totalCombo += notesData.DNotes.Count;
+        totalCombo += notesData.FNotes.Count;
+        totalCombo += notesData.JNotes.Count;
+        totalCombo += notesData.KNotes.Count;
+        totalCombo += notesData.LNotes.Count;
+        totalCombo += notesData.DLongNotes.Count;
+        totalCombo += notesData.FLongNotes.Count;
+        totalCombo += notesData.JLongNotes.Count;
+        totalCombo += notesData.KLongNotes.Count;
 
         bpm = notesData.bpm;
         barMillis = (60f / bpm) * 4f;
@@ -170,6 +185,7 @@ public class NoteManager : MonoBehaviour
                 CreateLongNote(previousNoteBar[K], note.bar, "K", KRailBase, previousExpectedTime[K], expectedTime);
             }
         }
+        Debug.Log($"Notes:{totalCombo}");
     }
 
 
