@@ -330,6 +330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentPlayTime: 0
   shiningStar: {fileID: 8300000, guid: 1be6f435dc4bd4a4180e7115557015de, type: 3}
+  isoSound: {fileID: 8300000, guid: 7957a87c5eab8eb4d9d20c12e8f754ff, type: 3}
   startDelay: 2
   offset: 0.5
 --- !u!4 &41974054 stripped

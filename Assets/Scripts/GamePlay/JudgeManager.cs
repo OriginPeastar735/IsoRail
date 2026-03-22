@@ -13,6 +13,7 @@ public class JudgeManager : MonoBehaviour
     public static event Action Miss;
     public static event Action DRailMove;
     public static event Action KRailMove;
+    public static event Action PlayIsoSound;
 
     public Transform DRailBase;
     public Transform FRailBase;
@@ -181,6 +182,7 @@ public class JudgeManager : MonoBehaviour
                 float judgeTiming = (currentPlayTime - note.expectedTime) * 1000f;
                 if (Mathf.Abs(judgeTiming) <= 22.25)
                 {
+                    PlayIsoSound?.Invoke();
                     EffectManager.instance.PerfectEffect(railBase);
                     Debug.Log($"parfect: {judgeTiming}ms");
                     note.Delete(key);
@@ -190,6 +192,7 @@ public class JudgeManager : MonoBehaviour
                 }
                 else if (Mathf.Abs(judgeTiming) <= 40)
                 {
+                    PlayIsoSound?.Invoke();
                     EffectManager.instance.GreatEffect(railBase);
                     Debug.Log($"great: {judgeTiming}ms");
                     note.Delete(key);
@@ -199,6 +202,7 @@ public class JudgeManager : MonoBehaviour
                 }
                 else if (Mathf.Abs(judgeTiming) <= 70)
                 {
+                    PlayIsoSound?.Invoke();
                     EffectManager.instance.GoodEffect(railBase);
                     Debug.Log($"good: {judgeTiming}ms");
                     note.Delete(key);

@@ -9,7 +9,9 @@ public class MusicManager : MonoBehaviour
     public static MusicManager instance;
     public float CurrentPlayTime; // 現在の再生時間
     public AudioClip shiningStar;
+    public AudioClip isoSound;
     private AudioSource audioSource;
+    private AudioSource IsoAudioSource;
 
     private double dspStartTime;
     public float startDelay = 1.0f;//曲が始まるまでの待ち秒
@@ -27,7 +29,9 @@ public class MusicManager : MonoBehaviour
     void Start()
     {
         audioSource = gameObject.GetComponent<AudioSource>();
+        IsoAudioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = shiningStar;
+        IsoAudioSource.clip = isoSound;
         dspStartTime = AudioSettings.dspTime + startDelay;
 
         //指定したdspTimeに再生予約（dspは精度のいいタイマー）
@@ -45,5 +49,20 @@ public class MusicManager : MonoBehaviour
         CurrentPlayTime = (float)(AudioSettings.dspTime - dspStartTime) + offset; 
         //CurrentPlayTime = audioSource.time;
         //Debug.Log(CurrentPlayTime);
+    }
+
+    void PlayIsoSound()
+    {
+        IsoAudioSource.PlayOneShot(isoSound);
+    }
+
+    void OnEnable()
+    {
+        JudgeManager.PlayIsoSound += PlayIsoSound;
+    }
+
+    void OnDisable()
+    {
+        JudgeManager.PlayIsoSound -= PlayIsoSound;
     }
 }
