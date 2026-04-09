@@ -5,6 +5,9 @@ using TMPro;
 
 public class EditorManager : MonoBehaviour
 {
+    public GameObject BeatLinePrefab;
+    public Transform BeatLinesParent;
+    public List<BeatLine> BeatLines = new List<BeatLine>();
     public static EditorManager instance;
     [SerializeField] private TextMeshProUGUI currrentBarText;
     [SerializeField] private TextMeshProUGUI currentBeatText;
@@ -26,7 +29,13 @@ public class EditorManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        for (int i = 0; i < currentBeat; i++)
+        {
+            GameObject obj = Instantiate(BeatLinePrefab, BeatLinesParent);
+            BeatLine beatLine = obj.GetComponent<BeatLine>();
+            beatLine.Init(currentBeat, i);
+            BeatLines.Add(beatLine);
+        }
     }
 
     // Update is called once per frame
@@ -35,16 +44,39 @@ public class EditorManager : MonoBehaviour
         currrentBarText.text = currentBar.ToString();
         currentBeatText.text = currentBeat.ToString();
         nextBarText.text = nextBar.ToString();
+
     }
 
     public void PlusBeat()
     {
+        for (int i = BeatLines.Count - 1; i>=0; i--)
+        {
+           BeatLines[i].Delete();
+        }
         currentBeat++;
+        for (int i = 0; i < currentBeat; i++)
+        {
+            GameObject obj = Instantiate(BeatLinePrefab, BeatLinesParent);
+            BeatLine beatLine = obj.GetComponent<BeatLine>();
+            beatLine.Init(currentBeat, i);
+            BeatLines.Add(beatLine);
+        }
     }
 
     public void MinusBeat()
     {
+        for (int i = BeatLines.Count - 1; i>=0; i--)
+        {
+           BeatLines[i].Delete();
+        }
         currentBeat--;
+        for (int i = 0; i < currentBeat; i++)
+        {
+            GameObject obj = Instantiate(BeatLinePrefab, BeatLinesParent);
+            BeatLine beatLine = obj.GetComponent<BeatLine>();
+            beatLine.Init(currentBeat, i);
+            BeatLines.Add(beatLine);
+        }
     }
 
     public void NextBar()
@@ -59,4 +91,8 @@ public class EditorManager : MonoBehaviour
         nextBar--;
     }
 
+    public void RemoveBeatLine(BeatLine beatLine)
+    {
+        BeatLines.Remove(beatLine);
+    }
 }
