@@ -9,6 +9,7 @@ public class EditorManager : MonoBehaviour
     public Transform BeatLinesParent;
     public List<BeatLine> BeatLines = new List<BeatLine>();
     public static EditorManager instance;
+    public TMP_InputField BeatInput;
     [SerializeField] private TextMeshProUGUI currrentBarText;
     [SerializeField] private TextMeshProUGUI currentBeatText;
     [SerializeField] private TextMeshProUGUI nextBarText;
@@ -47,38 +48,6 @@ public class EditorManager : MonoBehaviour
 
     }
 
-    public void PlusBeat()
-    {
-        for (int i = BeatLines.Count - 1; i>=0; i--)
-        {
-           BeatLines[i].Delete();
-        }
-        currentBeat++;
-        for (int i = 0; i < currentBeat; i++)
-        {
-            GameObject obj = Instantiate(BeatLinePrefab, BeatLinesParent);
-            BeatLine beatLine = obj.GetComponent<BeatLine>();
-            beatLine.Init(currentBeat, i);
-            BeatLines.Add(beatLine);
-        }
-    }
-
-    public void MinusBeat()
-    {
-        for (int i = BeatLines.Count - 1; i>=0; i--)
-        {
-           BeatLines[i].Delete();
-        }
-        currentBeat--;
-        for (int i = 0; i < currentBeat; i++)
-        {
-            GameObject obj = Instantiate(BeatLinePrefab, BeatLinesParent);
-            BeatLine beatLine = obj.GetComponent<BeatLine>();
-            beatLine.Init(currentBeat, i);
-            BeatLines.Add(beatLine);
-        }
-    }
-
     public void NextBar()
     {
         currentBar++;
@@ -94,5 +63,23 @@ public class EditorManager : MonoBehaviour
     public void RemoveBeatLine(BeatLine beatLine)
     {
         BeatLines.Remove(beatLine);
+    }
+
+    public void OnSubmit()
+    {
+        currentBeat = int.TryParse(BeatInput.text, out int result) ? result : currentBeat;
+        Debug.Log(currentBeat);
+        for (int i = BeatLines.Count - 1; i>=0; i--)
+        {
+           BeatLines[i].Delete();
+        }
+        for (int i = 0; i < currentBeat; i++)
+        {
+            GameObject obj = Instantiate(BeatLinePrefab, BeatLinesParent);
+            BeatLine beatLine = obj.GetComponent<BeatLine>();
+            beatLine.Init(currentBeat, i);
+            BeatLines.Add(beatLine);
+        }
+        currentBeatText.text = currentBeat.ToString();
     }
 }
