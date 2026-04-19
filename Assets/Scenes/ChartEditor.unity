@@ -1850,7 +1850,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 1837756660}
   rail: 4
-  RelativeEmpty: {fileID: 1389439626}
+  xRailDiff: 70
+  nextBarDiff: 400
+  LeftEndEmpty: {fileID: 1389439625}
   mainCamera: {fileID: 1687011646}
   previewPrefab: {fileID: 507628866}
   currentBar: 0
