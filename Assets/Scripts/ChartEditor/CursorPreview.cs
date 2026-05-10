@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.LowLevel;
 
 public class CursorPreview : MonoBehaviour
 {
+    public static CursorPreview instance;
     [SerializeField] private Canvas canvas;
     private SpriteRenderer rend;
     private RectTransform canvasRectTransform;
@@ -20,6 +23,16 @@ public class CursorPreview : MonoBehaviour
     public int currentBeat = 4;
     public int barHeight = 400;
 
+    public int stateX;
+    public int stateY;
+
+    void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+    }
     void Start()
     {
         canvasRectTransform = canvas.GetComponent<RectTransform>();
@@ -44,8 +57,10 @@ public class CursorPreview : MonoBehaviour
             if(localPoint.x >= LeftEnd.x + 70 * (i-1) 
             && localPoint.x <= LeftEnd.x + 70 * i)
             {
+                stateX = i;
                 for(int j = 0; j < currentBeat; j++)
                 {
+                    stateY = j;
                     float searchY = LeftEnd.y + (nextBarDiff * (j / (float)currentBeat));
                     Debug.Log(nextBarDiff);
                     if(localPoint.y >= searchY - 20 
@@ -56,8 +71,10 @@ public class CursorPreview : MonoBehaviour
                         tmp.y = searchY;
                         previewPrefab.transform.localPosition = tmp;
                     }
+                    break;
                 }
             }
+            break;
         }
     }
 

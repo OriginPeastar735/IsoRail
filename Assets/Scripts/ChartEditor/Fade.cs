@@ -48,6 +48,6 @@ public class Fade : MonoBehaviour
 
     void OnMouseDown()
     {
-            EditorManager.instance.currentNote = num;
+        EditorManager.instance.currentNote = num;
     }
 }

@@ -19,6 +19,9 @@ public class EditorManager : MonoBehaviour
     public int nextBar = 1;
     public int currentBeat = 4;
 
+    public int stateX => CursorPreview.instance.stateX;
+    public int stateY => CursorPreview.instance.stateY;
+
 
     void Awake()
     {
@@ -30,6 +33,7 @@ public class EditorManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         for (int i = 0; i < currentBeat; i++)
         {
             GameObject obj = Instantiate(BeatLinePrefab, BeatLinesParent);
@@ -46,6 +50,10 @@ public class EditorManager : MonoBehaviour
         currentBeatText.text = currentBeat.ToString();
         nextBarText.text = nextBar.ToString();
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            
+        }
     }
 
     public void NextBar()

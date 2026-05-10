@@ -16,7 +16,6 @@ public class EffectManager : MonoBehaviour
     public static GameObject JHoldEffect;
     public static GameObject KHoldEffect;
 
-
     void Awake()
     {
         if (instance == null)
@@ -27,7 +26,6 @@ public class EffectManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
