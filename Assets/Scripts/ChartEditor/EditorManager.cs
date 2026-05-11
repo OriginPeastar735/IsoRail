@@ -22,6 +22,8 @@ public class EditorManager : MonoBehaviour
     public int stateX => CursorPreview.instance.stateX;
     public int stateY => CursorPreview.instance.stateY;
 
+    
+
 
     void Awake()
     {
@@ -50,9 +52,52 @@ public class EditorManager : MonoBehaviour
         currentBeatText.text = currentBeat.ToString();
         nextBarText.text = nextBar.ToString();
 
-        if (Input.GetMouseButtonDown(0))
+        if (stateX != -1 && stateY != -1 && Input.GetMouseButtonDown(0))
         {
-            
+            AddNotes();
+        }
+    }
+
+    public float CulcBar()
+    {
+        return (1 * (stateY/currentBeat)) + currentBar;
+    }
+
+    public void AddNotes()
+    {
+        switch (currentNote)
+        {
+            case 0:
+            EditorNoteManager.instance.AddNote
+            (ConvertStateX(), CulcBar());
+            break;
+            case 1:
+            EditorNoteManager.instance.AddIsoNote
+            (ConvertStateX(), CulcBar());
+            break;
+            case 2:
+            EditorNoteManager.instance.AddLongNote
+            (ConvertStateX(), CulcBar());
+            break;
+        }
+    }
+
+    public string ConvertStateX()
+    {
+        switch(stateX)
+        {
+            case 1:
+            if(currentNote == 1)return "S";
+            else return "D";
+            case 2:
+            return "F";
+            case 3:
+            return "J";
+            case 4:
+            if(currentNote == 1)return "L";
+            else return "K";
+            default:
+            return "D";
         }
     }
 
