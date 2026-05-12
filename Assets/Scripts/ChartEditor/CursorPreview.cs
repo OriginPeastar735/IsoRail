@@ -41,6 +41,7 @@ public class CursorPreview : MonoBehaviour
         canvasRectTransform = canvas.GetComponent<RectTransform>();
         LeftEnd = LeftEndEmpty.transform.localPosition;
         rend = PreviewNote.GetComponent<SpriteRenderer>();
+        rend.color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
     }
 
     // Update is called once per frame
@@ -80,8 +81,8 @@ public class CursorPreview : MonoBehaviour
                 for (int j = 0; j < currentBeat; j++)
                 {
                     float searchY = LeftEnd.y + (nextBarDiff * (j / (float)currentBeat));
-                    if (localPoint.y >= searchY - 20
-                     && localPoint.y <= searchY + 20)
+                    if (localPoint.y >= searchY - 10
+                     && localPoint.y <= searchY + 10)
                     {
                         stateY = j;
                         inY = true;

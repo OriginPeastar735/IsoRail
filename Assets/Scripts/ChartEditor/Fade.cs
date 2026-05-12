@@ -34,6 +34,11 @@ public class Fade : MonoBehaviour
                 rend.color  =   new Color(0.5f,0.5f,0.5f,0f);
             }
         }
+
+        if (isHover && Input.GetMouseButtonDown(0))
+        {
+            EditorManager.instance.currentNote = num;
+        }
     }
 
     void OnMouseEnter()
@@ -44,10 +49,5 @@ public class Fade : MonoBehaviour
     void OnMouseExit()
     {
         isHover = false;
-    }
-
-    void OnMouseDown()
-    {
-        EditorManager.instance.currentNote = num;
     }
 }

@@ -18,6 +18,7 @@ public class EditorNoteManager : MonoBehaviour
     public GameObject EditorLongNotePrefab;
 
 
+
     [System.Serializable]
     public class NoteData
     {
@@ -56,7 +57,7 @@ public class EditorNoteManager : MonoBehaviour
 
     void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -64,22 +65,22 @@ public class EditorNoteManager : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void AddNote(string railStr, float bar)
     {
         GameObject obj = Instantiate(
-            EditorNotePrefab, 
+            EditorNotePrefab,
             SelectTransform(railStr));
         EditorNote note = obj.GetComponent<EditorNote>();
-        note.noteBar = bar;
+        note.Init(bar, railStr);
         switch (railStr)
         {
             case "D":
@@ -105,12 +106,47 @@ public class EditorNoteManager : MonoBehaviour
 
     public void AddIsoNote(string railStr, float bar)
     {
-        
+
     }
 
     public void AddLongNote(string railStr, float bar)
     {
-        
+
+    }
+
+    public void RemoveNote(EditorNote note, string railStr)
+    {
+        switch (railStr)
+        {
+            case "S":
+                SNotes.Remove(note);
+                break;
+            case "D":
+                DNotes.Remove(note);
+                break;
+            case "F":
+                FNotes.Remove(note);
+                break;
+            case "J":
+                JNotes.Remove(note);
+                break;
+            case "K":
+                KNotes.Remove(note);
+                break;
+            case "L":
+                LNotes.Remove(note);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void UpdateVisibleNotes()
+    {
+        foreach (var note in DNotes) if(note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in FNotes) if(note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in JNotes) if(note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in KNotes) if(note != null) note.UpdateVisibility(currentBar);
     }
 
     public Transform SelectTransform(string str)
@@ -118,19 +154,19 @@ public class EditorNoteManager : MonoBehaviour
         switch (str)
         {
             case "S":
-            return DRailEmpty;
+                return DRailEmpty;
             case "D":
-            return DRailEmpty;
+                return DRailEmpty;
             case "F":
-            return FRailEmpty;
+                return FRailEmpty;
             case "J":
-            return JRailEmpty;
+                return JRailEmpty;
             case "K":
-            return KRailEmpty;
+                return KRailEmpty;
             case "L":
-            return KRailEmpty;
+                return KRailEmpty;
             default:
-            return DRailEmpty;
+                return DRailEmpty;
 
         }
     }

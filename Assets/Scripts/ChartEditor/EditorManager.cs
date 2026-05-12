@@ -60,7 +60,10 @@ public class EditorManager : MonoBehaviour
 
     public float CulcBar()
     {
-        return (1 * (stateY/currentBeat)) + currentBar;
+        float tmp;
+        tmp = (1f * ((float)stateY/(float)currentBeat)) + (float)currentBar;
+        Debug.Log(tmp);
+        return tmp;
     }
 
     public void AddNotes()
@@ -105,12 +108,14 @@ public class EditorManager : MonoBehaviour
     {
         currentBar++;
         nextBar++;
+        EditorNoteManager.instance.UpdateVisibleNotes();
     }
 
     public void PreviousBar()
     {
         currentBar--;
         nextBar--;
+        EditorNoteManager.instance.UpdateVisibleNotes();
     }
 
     public void RemoveBeatLine(BeatLine beatLine)
