@@ -42,12 +42,12 @@ public class EditorNoteManager : MonoBehaviour
         public List<NoteData> KLongNotes;
     }
 
-    public List<EditorNote> SNotes = new List<EditorNote>();
+    public List<EditorIsoNote> SNotes = new List<EditorIsoNote>();
     public List<EditorNote> DNotes = new List<EditorNote>();
     public List<EditorNote> FNotes = new List<EditorNote>();
     public List<EditorNote> JNotes = new List<EditorNote>();
     public List<EditorNote> KNotes = new List<EditorNote>();
-    public List<EditorNote> LNotes = new List<EditorNote>();
+    public List<EditorIsoNote> LNotes = new List<EditorIsoNote>();
     public List<EditorLong> DLongNotes = new List<EditorLong>();
     public List<EditorLong> FLongNotes = new List<EditorLong>();
     public List<EditorLong> JLongNotes = new List<EditorLong>();
@@ -106,7 +106,24 @@ public class EditorNoteManager : MonoBehaviour
 
     public void AddIsoNote(string railStr, float bar)
     {
+        GameObject obj = Instantiate(
+            EditorIsoNotePrefab,
+            SelectTransform(railStr));
+        EditorIsoNote note = obj.GetComponent<EditorIsoNote>();
+        note.Init(bar, railStr);
+        switch (railStr)
+        {
+            case "S":
 
+                SNotes.Add(note);
+                break;
+            case "L":
+
+                LNotes.Add(note);
+                break;
+            default:
+                break;
+        }
     }
 
     public void AddLongNote(string railStr, float bar)
@@ -118,9 +135,6 @@ public class EditorNoteManager : MonoBehaviour
     {
         switch (railStr)
         {
-            case "S":
-                SNotes.Remove(note);
-                break;
             case "D":
                 DNotes.Remove(note);
                 break;
@@ -133,6 +147,18 @@ public class EditorNoteManager : MonoBehaviour
             case "K":
                 KNotes.Remove(note);
                 break;
+            default:
+                break;
+        }
+    }
+
+    public void RemoveIsoNote(EditorIsoNote note, string railStr)
+    {
+        switch (railStr)
+        {
+            case "S":
+                SNotes.Remove(note);
+                break;
             case "L":
                 LNotes.Remove(note);
                 break;
@@ -143,10 +169,12 @@ public class EditorNoteManager : MonoBehaviour
 
     public void UpdateVisibleNotes()
     {
+        foreach (var note in SNotes) if(note != null) note.UpdateVisibility(currentBar);
         foreach (var note in DNotes) if(note != null) note.UpdateVisibility(currentBar);
         foreach (var note in FNotes) if(note != null) note.UpdateVisibility(currentBar);
         foreach (var note in JNotes) if(note != null) note.UpdateVisibility(currentBar);
         foreach (var note in KNotes) if(note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in LNotes) if(note != null) note.UpdateVisibility(currentBar);
     }
 
     public Transform SelectTransform(string str)
