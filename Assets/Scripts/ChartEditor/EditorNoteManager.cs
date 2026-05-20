@@ -55,6 +55,8 @@ public class EditorNoteManager : MonoBehaviour
 
     public int currentBar => EditorManager.instance.currentBar;
 
+    public bool placedStartLongNote = false;
+
     void Awake()
     {
         if (instance == null)
@@ -128,7 +130,14 @@ public class EditorNoteManager : MonoBehaviour
 
     public void AddLongNote(string railStr, float bar)
     {
-
+        if(!placedStartLongNote)
+        {
+            placedStartLongNote = true;
+        }
+        else
+        {
+            
+        }
     }
 
     public void RemoveNote(EditorNote note, string railStr)
