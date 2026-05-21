@@ -56,6 +56,7 @@ public class EditorNoteManager : MonoBehaviour
     public int currentBar => EditorManager.instance.currentBar;
 
     public bool placedStartLongNote = false;
+    private float[] previousNoteBar = new float[4];
 
     void Awake()
     {
@@ -130,13 +131,43 @@ public class EditorNoteManager : MonoBehaviour
 
     public void AddLongNote(string railStr, float bar)
     {
-        if(!placedStartLongNote)
+        if (!placedStartLongNote)
         {
             placedStartLongNote = true;
+            previousNoteBar[ConvertRailStr(railStr)] = bar;
         }
         else
         {
-            
+            placedStartLongNote = false;
+            GameObject obj = Instantiate(
+                EditorLongNotePrefab,
+                SelectTransform(railStr));
+            EditorLong longNote = obj.GetComponent<EditorLong>();
+            longNote.Init(
+                previousNoteBar[ConvertRailStr(railStr)],
+                 bar, railStr);
+
+            switch (railStr)
+            {
+                case "D":
+
+                    DLongNotes.Add(longNote);
+                    break;
+                case "F":
+
+                    FLongNotes.Add(longNote);
+                    break;
+                case "J":
+
+                    JLongNotes.Add(longNote);
+                    break;
+                case "K":
+
+                    KLongNotes.Add(longNote);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -176,14 +207,39 @@ public class EditorNoteManager : MonoBehaviour
         }
     }
 
+    public void RemoveLongNote(EditorLong note, string railStr)
+    {
+        switch (railStr)
+        {
+            case "D":
+                DLongNotes.Remove(note);
+                break;
+            case "F":
+                FLongNotes.Remove(note);
+                break;
+            case "J":
+                JLongNotes.Remove(note);
+                break;
+            case "K":
+                KLongNotes.Remove(note);
+                break;
+            default:
+                break;
+        }
+    }
+
     public void UpdateVisibleNotes()
     {
-        foreach (var note in SNotes) if(note != null) note.UpdateVisibility(currentBar);
-        foreach (var note in DNotes) if(note != null) note.UpdateVisibility(currentBar);
-        foreach (var note in FNotes) if(note != null) note.UpdateVisibility(currentBar);
-        foreach (var note in JNotes) if(note != null) note.UpdateVisibility(currentBar);
-        foreach (var note in KNotes) if(note != null) note.UpdateVisibility(currentBar);
-        foreach (var note in LNotes) if(note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in DLongNotes) if (note != null) note.UpdatePosition(currentBar);
+        foreach (var note in FLongNotes) if (note != null) note.UpdatePosition(currentBar);
+        foreach (var note in JLongNotes) if (note != null) note.UpdatePosition(currentBar);
+        foreach (var note in KLongNotes) if (note != null) note.UpdatePosition(currentBar);
+        foreach (var note in SNotes) if (note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in DNotes) if (note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in FNotes) if (note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in JNotes) if (note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in KNotes) if (note != null) note.UpdateVisibility(currentBar);
+        foreach (var note in LNotes) if (note != null) note.UpdateVisibility(currentBar);
     }
 
     public Transform SelectTransform(string str)
@@ -205,6 +261,23 @@ public class EditorNoteManager : MonoBehaviour
             default:
                 return DRailEmpty;
 
+        }
+    }
+
+    public int ConvertRailStr(string railStr)
+    {
+        switch (railStr)
+        {
+            case "D":
+                return 0;
+            case "F":
+                return 1;
+            case "J":
+                return 2;
+            case "K":
+                return 3;
+            default:
+                return 0;
         }
     }
 }
